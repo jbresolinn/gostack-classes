@@ -5,6 +5,32 @@ interface FormProps {
   hasError: boolean;
 }
 
+export const Header = styled.header`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 700px;
+
+  button {
+    display: flex;
+    align-items: center;
+    padding: 16px 24px;
+    border: 0;
+    background: transparent;
+    transition: background-color 0.3s;
+    color: #c53030;
+    border-radius: 8px;
+
+    &:hover {
+      background: rgba(197, 48, 48, 0.08);
+    }
+
+    svg {
+      margin-right: 8px;
+    }
+  }
+`;
+
 export const Title = styled.h1`
   font-size: 48px;
   color: #3a3a3a;

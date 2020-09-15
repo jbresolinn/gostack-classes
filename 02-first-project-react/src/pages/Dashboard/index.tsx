@@ -1,9 +1,10 @@
 import React, { useState, FormEvent, useEffect } from 'react';
 
-import { FiChevronRight } from 'react-icons/fi';
-import logoImage from '../../assets/images/logo.svg';
+import { FiChevronRight, FiTrash2 } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
-import { Title, Form, Repositories, Error } from './styles';
+import { Title, Form, Repositories, Error, Header } from './styles';
+import logoImage from '../../assets/images/logo.svg';
 
 import api from '../../services/api';
 
@@ -42,7 +43,7 @@ const Dashboard: React.FC = () => {
   ): Promise<void> {
     event.preventDefault();
     if (!newRepo) {
-      setInputError('Por favor, informe o autor/nome do repositório!');
+      setInputError('Please, inform the owner/repository name!');
       return;
     }
 
@@ -54,28 +55,43 @@ const Dashboard: React.FC = () => {
       setNewRepo('');
       setInputError('');
     } catch (err) {
-      setInputError('Erro ao buscar repositório!');
+      setInputError('Error searching for repository!');
     }
   }
+
+  function handleClearStorage() {
+    localStorage.clear();
+    setRepositories([]);
+  }
+
   return (
     <>
-      <img src={logoImage} alt="github explorer logo" />
-      <Title>Explore repositórios no github!</Title>
+      <Header>
+        <img src={logoImage} alt="github explorer logo" />
+        <button type="button" onClick={handleClearStorage}>
+          <FiTrash2 size={18} />
+          Clear cache
+        </button>
+      </Header>
+      <Title>Explore github repositories!</Title>
 
       <Form onSubmit={handleAddRepository} hasError={!!inputError}>
         <input
           value={newRepo}
           onChange={e => setNewRepo(e.target.value)}
-          placeholder="Digite o nome do repositório"
+          placeholder="owner/repository (example: facebook/react-native)"
         />
-        <button type="submit">Pesquisar</button>
+        <button type="submit">Search Repository</button>
       </Form>
 
       {inputError && <Error>{inputError}</Error>}
 
       <Repositories>
         {repositories.map(repository => (
-          <a key={repository.full_name} href="/">
+          <Link
+            key={repository.full_name}
+            to={`/repository/${repository.full_name}`}
+          >
             <img
               src={repository.owner.avatar_url}
               alt={repository.owner.login}
@@ -86,7 +102,7 @@ const Dashboard: React.FC = () => {
             </div>
 
             <FiChevronRight size={24} />
-          </a>
+          </Link>
         ))}
       </Repositories>
     </>
