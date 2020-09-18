@@ -17,14 +17,11 @@ const SignUp: React.FC = () => {
   const handleSubmit = useCallback(async (data: object) => {
     try {
       const schema = Yup.object().shape({
-        name: Yup.string().required("O campo 'nome' é obrigatório"),
+        name: Yup.string().required('O nome é obrigatório!'),
         email: Yup.string()
-          .required("O campo 'email' é obrigatório")
-          .email('Por favor, informe um email válido!'),
-        password: Yup.string().min(
-          6,
-          'A senha precisa ter no mínimo 6 dígitos.',
-        ),
+          .required('O email é obrigatório!')
+          .email('O email é inválido!'),
+        password: Yup.string().min(6, 'No mínimo 6 dígitos.'),
       });
 
       await schema.validate(data, {
